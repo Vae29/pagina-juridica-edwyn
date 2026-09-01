@@ -660,18 +660,25 @@ a:hover{color:var(--gold-dark)}
     const SERVICE_ID = 'service_oxg1u9z';
     const TEMPLATE_ID = 'template_ylgn03f';
 
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams).then(function(){
-      successMsg.style.background = 'rgba(22,163,74,0.08)';
-      successMsg.style.color = 'var(--success)';
-      successMsg.textContent = 'El correo fue enviado con éxito. Nos pondremos en contacto lo más pronto posible.';
-      form.reset();
-      setTimeout(function(){ successMsg.style.display = 'none'; }, 6000);
-    }, function(error){
-      console.error('EmailJS error', error);
-      successMsg.style.background = 'rgba(220,38,38,0.08)';
-      successMsg.style.color = 'var(--danger)';
-      successMsg.textContent = 'No se pudo enviar el correo. Intente de nuevo o escríbanos por WhatsApp.';
-    });
+    // Debug: mostrar lo que se enviará
+    console.log('EmailJS send - SERVICE_ID:', SERVICE_ID, 'TEMPLATE_ID:', TEMPLATE_ID, 'templateParams:', templateParams);
+
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+      .then(function(response){
+        console.log('EmailJS success response:', response);
+        successMsg.style.background = 'rgba(22,163,74,0.08)';
+        successMsg.style.color = 'var(--success)';
+        successMsg.textContent = 'El correo fue enviado con éxito. Nos pondremos en contacto lo más pronto posible.';
+        form.reset();
+        setTimeout(function(){ successMsg.style.display = 'none'; }, 6000);
+      })
+      .catch(function(error){
+        console.error('EmailJS error (catch):', error);
+        try{ console.error('Error details:', error && error.text ? error.text : error); }catch(e){}
+        successMsg.style.background = 'rgba(220,38,38,0.08)';
+        successMsg.style.color = 'var(--danger)';
+        successMsg.textContent = 'No se pudo enviar el correo. Intente de nuevo o escríbanos por WhatsApp.';
+      });
   });
   
   // Modales
